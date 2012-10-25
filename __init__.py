@@ -20,13 +20,14 @@ if __name__ == '__main__':
 
 @app.route('/', methods = ['GET'])
 def JsonView():
-	posts = Post.objects.all()
+	posts = Blog.objects.limit(100)
 	count = len(posts)
 	js = "{" + json.dumps("blogs") + ":["
 	for post in posts:
-		js += "{" + json.dumps("subject") + ":" + json.dumps(post.title) + ","
+		js += "{" + json.dumps("name") + ":" + json.dumps(post.name) + ","
+		js += json.dumps("subject") + ":" + json.dumps(post.title) + ","
 		js += json.dumps("content") + ":" + json.dumps(post.body) + ","
-		js += json.dumps("created") + ":" + json.dumps(post.created_at.strftime('%H:%M %Y-%m-%d')) + "}"
+		js += json.dumps("created") + ":" + json.dumps(post.created.strftime("%a %b %d %H:%M:%S %Y")) + "}"
 		try:
 			if count > 1:
 				js += ","
@@ -37,12 +38,12 @@ def JsonView():
 	res = Response(js, status=200, mimetype='application/json')
 	return res
 
-@app.route("/newpost", methods = ['POST'])
+@app.route("/newpost/", methods = ['POST'])
 def NewPost():
-	subject = request.form["subject"]
+	subject = request.form["title"]
 	content = request.form["content"]
 	name = request.form["name"]
-	post = Post (title=subject,body=content,name=name)
+	post = Blog (title=subject,body=content,name=name)
 	if post.save():
 		js = "{" + json.dumps("success") + ":" + json.dumps("yes") + "}"
 	else:
@@ -50,7 +51,7 @@ def NewPost():
 	res = Response(js, status=200, mimetype='application/json')
 	return res
 
-@app.route("/signup", methods = ['POST'])
+@app.route("/signup/", methods = ['POST'])
 def Signup():
 	name = request.form["name"]
 	password = request.form["password"]
@@ -77,7 +78,7 @@ def check_user(users,pword):
 	except:
 		return 0
 
-@app.route("/login", methods = ['POST'])
+@app.route("/login/", methods = ['POST'])
 def Login():
 	name = request.form["name"]
 	password = request.form["password"]
@@ -99,15 +100,15 @@ class UserDetails(db.Document):
 	meta = {'allow_inheritance': True,
 			'indexes': ['name', 'name']}
 
-class Post(db.Document):
-	created_at = db.DateTimeField(default=datetime.datetime.now, required=True)
+class Blog(db.Document):
+	created = db.DateTimeField(default=datetime.datetime.now, required=True)
 	title = db.StringField(max_length=255, required=True)
 	name = db.StringField(max_length=255, required=True)
 	body = db.StringField(required=True)
 
 
 	meta = {'allow_inheritance': True,
-			'indexes': ['-created_at', 'name'],
-			'ordering': ['-created_at']}
+			'indexes': ['-created', 'name'],
+			'ordering': ['-created']}
 
 
