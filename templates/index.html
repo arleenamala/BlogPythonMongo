@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Blog Application Web Interface</title>
+		<!-- Bootstrap -->
+		<link href="/static/css/bootstrap.min.css" rel="stylesheet">
+	</head>
+	<body>
+		<div class="container" id="loginContainer" style="display:none">
+			<div id="loginDiv">
+				<!-- Login Page content-->
+				<h1 align="center">Blog Application!</h1>
+				<form name="loginForm" id="loginForm" style="vertical-align: middle; margin-left: 20%" class="form-horizontal"
+				onsubmit="javascript:void(0);">
+					<div id="loginErrorMsgDiv" style="display:none;"></div>
+					<div class="control-group">
+						<label class="control-label" for="username">Username</label>
+						<div class="controls">
+							<input type="text" id="username" placeholder="Username" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="password">Password</label>
+						<div class="controls">
+							<input type="password" id="password" placeholder="Password" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="button" class="btn btn-primary" onclick="blogController.login();">
+								Login
+							</button>
+							<button type="button" class="btn" onclick="blogController.showSignUp();">
+								Signup
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		<div class="container" id="blogsContainer" style="display:none">
+			<div class="row">
+				<h1 align="center">Blog Application!</h1>
+				<div id="listPageBtns">
+					<button type="button" class="btn btn-danger" style="float:left" onclick="blogController.logout();">
+						Logout
+					</button>
+					<button type="button" class="btn btn-primary" style="float:right" onclick="blogController.showNewPostScreen();">
+						New Post
+					</button>
+				</div>
+			</div>
+			<div class="row">
+				<div class="span9" style="margin-left: 10%" id="blogEntries">
+					<!--List of blogs go here -->
+				</div>
+			</div>
+		</div>
+		<div class="container" id="newPostContainer" style="display:none">
+			<div id="newPostDiv">
+				<!-- Login Page content-->
+				<h1 align="center">Blog Application!</h1>
+				<form name="newPostForm" id="newPostForm" style="vertical-align: middle; margin-left: 20%" class="form-horizontal"
+				onsubmit="javascript:void(0);">
+					<div id="newPostErrorMsgDiv"></div>
+					<div class="control-group">
+						<label class="control-label" for="title">Blog Title <span style="color:red">*</span></label>
+						<div class="controls">
+							<input type="text" id="title" name="title" placeholder="Title" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="content">Content <span style="color:red">*</span></label>
+						<div class="controls">
+							<textarea id="content" rows="10" placeholder="Blog post content goes here..."></textarea>
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="button" class="btn btn-primary" onclick="blogController.postBlogEntry();">
+								Post Blog
+							</button>
+							<button type="button" class="btn btn-danger" onclick="blogController.getBlogs();">
+								Cancel
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+
+		</div>
+		<div class="container" id="signUpContainer" style="display:none">
+			<div id="signUpDiv">
+				<!-- Sign up Page content-->
+				<h1 align="center">Blog Application!</h1>
+				<form name="signUpForm" id="signUpForm" style="vertical-align: middle; margin-left: 20%" class="form-horizontal"
+				onsubmit="javascript:void(0);">
+					<div id="signUpErrorMsgDiv" style="display:none;"></div>
+					<div class="control-group">
+						<label class="control-label" for="signUpUsername">Username <span style="color:red">*</span></label>
+						<div class="controls">
+							<input type="text" id="signUpUsername" placeholder="Username" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="signUpPassword">Password <span style="color:red">*</span></label>
+						<div class="controls">
+							<input type="password" id="signUpPassword" placeholder="Password" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="confirmPassword">Confirm Password <span style="color:red">*</span></label>
+						<div class="controls">
+							<input type="password" id="confirmPassword" placeholder="Confirm Password" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="email">Email</label>
+						<div class="controls">
+							<input type="email" id="email" placeholder="user@email.com" value="">
+						</div>
+					</div>
+					<div class="control-group">
+						<div class="controls">
+							<button type="button" class="btn btn-primary" onclick="blogController.signUp();">
+								Signup
+							</button>
+							<button type="button" class="btn" onclick="blogController.showLoginScreen();">
+								Cancel
+							</button>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+		
+		<script src="http://code.jquery.com/jquery-latest.js"></script>
+		<script src="/static/js/bootstrap.min.js"></script>
+		<script src="/static/js/jquery.tmpl.min.js"></script>
+		<script src="/static/js/blogController.js"></script>
+	</body>
+	<script id="blogEntryTemplate" type="text/x-jquery-tmpl">
+		<div>
+		<div>${subject} <span style="float:right"><i>${created}</i></span></div>
+		<div><i>${content}</i></div>
+		<hr />
+		</div>
+	</script>
+	<style type="text/css">
+		body {
+			background-color: black;
+			font-family: helvetica;
+			color: papayawhip;
+		}
+	</style>
+	<script type="text/javascript">
+		$(document).ready(function() {
+			if (!window.blogController) {
+				window.blogController = new BlogController();
+				blogController.showLoginScreen();
+			}
+		});
+	</script>
+</html>

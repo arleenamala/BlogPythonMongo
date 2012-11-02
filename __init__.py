@@ -3,8 +3,8 @@ from flask.ext.mongoengine import MongoEngine
 import datetime
 from flask import url_for
 from flask import json
+from flask import render_template
 import hashlib
-
 
 
 app = Flask(__name__)
@@ -15,10 +15,15 @@ db = MongoEngine(app)
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)
 
 
-@app.route('/', methods = ['GET'])
+@app.route('/')
+def index():
+	return render_template('index.html') 
+
+
+@app.route('/blog/', methods = ['GET'])
 def JsonView():
 	posts = Blog.objects.limit(100)
 	count = len(posts)
